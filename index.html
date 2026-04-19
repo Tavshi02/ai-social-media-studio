@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Social Media Studio PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ─── DARK THEME VARIABLES ──────────────────────────── */
+  :root {
+    --bg:          #0b0d14;
+    --bg2:         #0f1220;
+    --surface:     #141828;
+    --surface2:    #1a2035;
+    --surface3:    #1f2640;
+    --border:      #252d45;
+    --border2:     #2e3a58;
+
+    /* Accent per slide type */
+    --c-hook:      #38bdf8;   /* neon blue    */
+    --c-problem:   #f87171;   /* soft red     */
+    --c-insight:   #fbbf24;   /* amber        */
+    --c-example:   #a78bfa;   /* purple       */
+    --c-takeaway:  #34d399;   /* green        */
+
+    /* Slide card gradients — dark glass */
+    --g1: linear-gradient(135deg, #0c1a2e 0%, #0a2040 60%, #0d1530 100%);
+    --g2: linear-gradient(135deg, #1a0c28 0%, #22103a 60%, #160d2e 100%);
+    --g3: linear-gradient(135deg, #1e1000 0%, #2a1600 60%, #1a1000 100%);
+    --g4: linear-gradient(135deg, #001428 0%, #001e40 60%, #000f20 100%);
+    --g5: linear-gradient(135deg, #001a12 0%, #00261a 60%, #001510 100%);
+
+    /* Global UI */
+    --accent:      #38bdf8;
+    --accent-dim:  rgba(56,189,248,0.12);
+    --accent-ring: rgba(56,189,248,0.2);
+    --text:        #e2e8f5;
+    --text-muted:  #7b8db5;
+    --text-dim:    #404e6e;
+    --danger:      #f87171;
+    --danger-dim:  rgba(248,113,113,0.12);
+    --radius:      18px;
+    --radius-sm:   10px;
+    --shadow:      0 4px 24px rgba(0,0,0,0.4);
+    --shadow-lg:   0 8px 48px rgba(0,0,0,0.55);
+    --glow-blue:   0 0 0 3px rgba(56,189,248,0.18);
+    --font-head:   'Syne', sans-serif;
+    --font-body:   'DM Sans', sans-serif;
+    --transition:  0.24s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 80% 50% at 10% -10%, rgba(56,189,248,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 90% 110%, rgba(167,139,250,0.06) 0%, transparent 60%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* subtle grid */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(56,189,248,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,189,248,0.025) 1px, transparent 1px);
+    background-size: 52px 52px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ─── HEADER ────────────────────────────────────────── */
+  header {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px;
+    background: rgba(11,13,20,0.88);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .logo { display: flex; align-items: center; gap: 12px; }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, #1d4ed8, #38bdf8);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+    box-shadow: 0 0 18px rgba(56,189,248,0.35);
+  }
+
+  .logo-text {
+    font-family: var(--font-head);
+    font-size: 16px; font-weight: 800; letter-spacing: -0.3px;
+    color: var(--text);
+  }
+
+  .logo-text span { color: var(--accent); }
+
+  .header-badge {
+    font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--accent);
+    background: var(--accent-dim); border: 1px solid rgba(56,189,248,0.2);
+    padding: 3px 8px; border-radius: 20px; margin-left: 8px;
+  }
+
+  .header-tagline {
+    font-size: 12px; color: var(--text-muted); font-weight: 400; letter-spacing: 0.3px;
+  }
+
+  /* ─── MAIN ──────────────────────────────────────────── */
+  main {
+    position: relative; z-index: 1;
+    max-width: 860px; margin: 0 auto;
+    padding: 36px 20px 80px;
+  }
+
+  /* ─── INPUT PANEL ───────────────────────────────────── */
+  .input-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow);
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+
+  .input-panel:focus-within {
+    border-color: rgba(56,189,248,0.3);
+    box-shadow: var(--shadow), 0 0 0 1px rgba(56,189,248,0.1);
+  }
+
+  .panel-label {
+    font-family: var(--font-head);
+    font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--text-muted);
+    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .panel-label::before {
+    content: ''; display: block;
+    width: 14px; height: 2px;
+    background: var(--accent); border-radius: 2px;
+  }
+
+  .input-row {
+    display: flex; gap: 12px; align-items: flex-start; flex-wrap: wrap;
+  }
+
+  .input-wrapper {
+    flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 14px; line-height: 1.6;
+    padding: 13px 15px; resize: none; min-height: 84px;
+    transition: border-color var(--transition), box-shadow var(--transition);
+    outline: none;
+  }
+
+  textarea::placeholder { color: var(--text-dim); }
+
+  textarea:focus {
+    border-color: rgba(56,189,248,0.4);
+    box-shadow: var(--glow-blue);
+    background: var(--surface3);
+  }
+
+  textarea.input-error {
+    border-color: var(--danger) !important;
+    box-shadow: 0 0 0 3px rgba(248,113,113,0.12) !important;
+    animation: shake 0.38s ease;
+  }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%      { transform: translateX(-5px); }
+    60%      { transform: translateX(4px); }
+    80%      { transform: translateX(-3px); }
+  }
+
+  .input-error-msg {
+    font-size: 12px; font-weight: 500; color: var(--danger);
+    display: flex; align-items: center; gap: 5px;
+    animation: fadeInUp 0.2s ease;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── TABS ──────────────────────────────────────────── */
+  .tabs-row {
+    display: flex; gap: 10px; align-items: center;
+    margin-bottom: 22px; flex-wrap: wrap;
+  }
+
+  .tabs-group {
+    display: flex;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50px; padding: 4px; gap: 2px;
+  }
+
+  .tab-btn {
+    background: none; border: none; border-radius: 50px;
+    color: var(--text-muted);
+    font-family: var(--font-body); font-size: 12px; font-weight: 500;
+    padding: 7px 16px; cursor: pointer;
+    transition: all var(--transition); white-space: nowrap; letter-spacing: 0.2px;
+  }
+
+  .tab-btn:hover { color: var(--text); background: rgba(56,189,248,0.07); }
+
+  .tab-btn.active {
+    background: var(--accent); color: #05131d;
+    font-weight: 700; box-shadow: 0 0 16px rgba(56,189,248,0.3);
+  }
+
+  .tab-btn.active.format-post  { background: #a78bfa; color: #160d2e; box-shadow: 0 0 16px rgba(167,139,250,0.3); }
+  .tab-btn.active.format-story { background: #34d399; color: #00160c; box-shadow: 0 0 16px rgba(52,211,153,0.3); }
+
+  .tabs-divider { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+
+  /* ─── BUTTONS ───────────────────────────────────────── */
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    border: none; border-radius: var(--radius-sm);
+    cursor: pointer; font-family: var(--font-body);
+    font-weight: 600; font-size: 13px; padding: 12px 20px;
+    transition: all var(--transition); white-space: nowrap;
+    letter-spacing: 0.2px; outline: none;
+  }
+
+  .btn:active { transform: scale(0.95); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #1d4ed8, #38bdf8);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(56,189,248,0.3);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 6px 28px rgba(56,189,248,0.45);
+    transform: translateY(-1px);
+    filter: brightness(1.08);
+  }
+
+  .btn-ghost {
+    background: var(--surface2); color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover {
+    color: var(--accent);
+    border-color: rgba(56,189,248,0.3);
+    background: var(--accent-dim);
+    transform: translateY(-1px);
+  }
+
+  .btn-danger {
+    background: var(--danger-dim); color: var(--danger);
+    border: 1px solid rgba(248,113,113,0.2);
+  }
+
+  .btn-danger:hover {
+    background: rgba(248,113,113,0.18);
+    box-shadow: 0 0 16px rgba(248,113,113,0.2);
+  }
+
+  .btn-sm { padding: 8px 14px; font-size: 12px; border-radius: 8px; }
+
+  /* ─── ACTION ROW ────────────────────────────────────── */
+  .action-row {
+    display: flex; gap: 10px; align-items: center;
+    justify-content: space-between; flex-wrap: wrap; margin-bottom: 22px;
+  }
+
+  .action-left, .action-right { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* ─── DISPLAY AREA ──────────────────────────────────── */
+  #display-area { position: relative; min-height: 380px; }
+
+  /* Loading */
+  .loading-state {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 80px 20px; gap: 18px;
+  }
+
+  .loader {
+    width: 42px; height: 42px;
+    border: 3px solid var(--border2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.65s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .loading-text { font-size: 13px; color: var(--text-muted); font-weight: 500; letter-spacing: 0.5px; }
+
+  /* Empty */
+  .empty-state {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; padding: 80px 20px;
+    text-align: center; gap: 12px;
+  }
+
+  .empty-icon { font-size: 44px; opacity: 0.2; }
+
+  .empty-title {
+    font-family: var(--font-head); font-size: 19px; font-weight: 700; color: var(--text-muted);
+  }
+
+  .empty-sub { font-size: 13px; color: var(--text-dim); max-width: 300px; line-height: 1.7; }
+
+  /* ─── CAROUSEL ──────────────────────────────────────── */
+  .carousel-container {
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    animation: fadeUp 0.36s ease both;
+    /* clip the sliding track without clipping card content height */
+    overflow: hidden;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .carousel-track {
+    display: flex;
+    transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+    /* height matches tallest visible card automatically */
+    align-items: stretch;
+  }
+
+  /* ─── SLIDE CARD ────────────────────────────────────── */
+  .slide-card {
+    /* flex item takes full track width */
+    flex: 0 0 100%;
+    width: 100%;
+
+    /* auto height — NEVER clips text */
+    height: auto;
+    min-height: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 40px 44px 32px;
+    position: relative;
+
+    /* must NOT use overflow:hidden — that clips text */
+    overflow: visible;
+    cursor: text;
+  }
+
+  /* gradient fills via ::before so overflow:visible works on the card */
+  .slide-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: inherit; z-index: 0;
+    /* border-radius on pseudo so card can be overflow:visible */
+    border-radius: var(--radius);
+  }
+
+  /* Decorative orb */
+  .slide-card::after {
+    content: ''; position: absolute;
+    right: -30px; bottom: -30px;
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.025);
+    z-index: 0; pointer-events: none;
+  }
+
+  .slide-card > * { position: relative; z-index: 1; }
+
+  /* Per-slide dark gradients */
+  .slide-card:nth-child(1) { background: var(--g1); }
+  .slide-card:nth-child(2) { background: var(--g2); }
+  .slide-card:nth-child(3) { background: var(--g3); }
+  .slide-card:nth-child(4) { background: var(--g4); }
+  .slide-card:nth-child(5) { background: var(--g5); }
+
+  /* Glass highlight strip at top */
+  .slide-card:nth-child(1)::before { border-top: 1px solid rgba(56,189,248,0.15); }
+  .slide-card:nth-child(2)::before { border-top: 1px solid rgba(167,139,250,0.15); }
+  .slide-card:nth-child(3)::before { border-top: 1px solid rgba(251,191,36,0.15); }
+  .slide-card:nth-child(4)::before { border-top: 1px solid rgba(56,189,248,0.12); }
+  .slide-card:nth-child(5)::before { border-top: 1px solid rgba(52,211,153,0.15); }
+
+  /* ── Badge ── */
+  .slide-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-head); font-size: 9px; font-weight: 700;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    padding: 4px 11px; border-radius: 20px;
+    margin-bottom: 18px; width: fit-content;
+  }
+
+  .slide-card:nth-child(1) .slide-badge { background: rgba(56,189,248,0.12);  color: var(--c-hook);     border: 1px solid rgba(56,189,248,0.25); }
+  .slide-card:nth-child(2) .slide-badge { background: rgba(248,113,113,0.12); color: var(--c-problem);  border: 1px solid rgba(248,113,113,0.25); }
+  .slide-card:nth-child(3) .slide-badge { background: rgba(251,191,36,0.12);  color: var(--c-insight);  border: 1px solid rgba(251,191,36,0.25); }
+  .slide-card:nth-child(4) .slide-badge { background: rgba(167,139,250,0.12); color: var(--c-example);  border: 1px solid rgba(167,139,250,0.25); }
+  .slide-card:nth-child(5) .slide-badge { background: rgba(52,211,153,0.12);  color: var(--c-takeaway); border: 1px solid rgba(52,211,153,0.25); }
+
+  /* ── Title ── */
+  .slide-title {
+    font-family: var(--font-head);
+    font-size: 26px;          /* reduced from 30–32px to prevent overflow */
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.3px;
+    color: #ffffff;
+    margin-bottom: 14px;
+    outline: none;
+    /* overflow fix */
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  /* ── Body ── */
+  .slide-body {
+    font-size: 15px;
+    line-height: 1.78;
+    color: rgba(226,232,245,0.72);
+    flex: 1;
+    outline: none;
+    /* overflow fix */
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    padding-bottom: 6px;
+  }
+
+  /* ── Footer ── */
+  .slide-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 24px; padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+  }
+
+  .slide-num {
+    font-family: var(--font-head); font-size: 10px; font-weight: 700;
+    color: rgba(255,255,255,0.2); letter-spacing: 1px;
+  }
+
+  .slide-copy-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px; color: rgba(226,232,245,0.4);
+    cursor: pointer; font-size: 11px; font-family: var(--font-body);
+    font-weight: 500; padding: 5px 11px;
+    transition: all var(--transition);
+    display: flex; align-items: center; gap: 5px;
+  }
+
+  .slide-copy-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: rgba(226,232,245,0.85);
+    border-color: rgba(255,255,255,0.14);
+  }
+
+  /* ─── CAROUSEL CONTROLS ─────────────────────────────── */
+  .carousel-controls {
+    display: flex; align-items: center; justify-content: center;
+    gap: 14px; margin-top: 18px;
+  }
+
+  .carousel-arrow {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--surface); border: 1px solid var(--border);
+    color: var(--text-muted); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; transition: all var(--transition); box-shadow: var(--shadow);
+  }
+
+  .carousel-arrow:hover {
+    border-color: var(--accent); color: var(--accent);
+    box-shadow: 0 0 20px rgba(56,189,248,0.25);
+    transform: scale(1.06);
+  }
+
+  .carousel-arrow:disabled { opacity: 0.25; cursor: not-allowed; transform: none; }
+  .carousel-arrow:disabled:hover { border-color: var(--border); color: var(--text-muted); box-shadow: var(--shadow); }
+
+  .carousel-dots { display: flex; gap: 7px; align-items: center; }
+
+  .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--border2); cursor: pointer; transition: all var(--transition);
+  }
+
+  .dot.active {
+    width: 22px; border-radius: 4px;
+    background: var(--accent); box-shadow: 0 0 10px rgba(56,189,248,0.4);
+  }
+
+  .carousel-counter {
+    font-family: var(--font-head); font-size: 11px; font-weight: 700;
+    color: var(--text-muted); letter-spacing: 0.5px;
+    min-width: 34px; text-align: center;
+  }
+
+  /* ─── POST 1:1 ──────────────────────────────────────── */
+  .post-view { display: flex; justify-content: center; animation: fadeUp 0.36s ease both; }
+
+  .post-card {
+    width: min(520px, 100%); aspect-ratio: 1 / 1;
+    border-radius: var(--radius);
+    background: linear-gradient(135deg, #0c1a2e 0%, #1a0c28 50%, #001420 100%);
+    border: 1px solid var(--border2);
+    box-shadow: var(--shadow-lg);
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 30px; overflow: auto; position: relative;
+  }
+
+  .post-card::before {
+    content: ''; position: absolute; top: -50px; right: -50px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(56,189,248,0.07), transparent 60%);
+    pointer-events: none;
+  }
+
+  .post-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+
+  .post-logo-badge {
+    font-family: var(--font-head); font-size: 10px; font-weight: 800;
+    letter-spacing: 1.5px; color: var(--accent); text-transform: uppercase;
+  }
+
+  .post-slides-list { flex: 1; display: flex; flex-direction: column; gap: 11px; overflow: auto; }
+
+  .post-slide-item { border-left: 2px solid var(--c-hook); padding-left: 13px; }
+  .post-slide-item:nth-child(2) { border-color: var(--c-problem); }
+  .post-slide-item:nth-child(3) { border-color: var(--c-insight); }
+  .post-slide-item:nth-child(4) { border-color: var(--c-example); }
+  .post-slide-item:nth-child(5) { border-color: var(--c-takeaway); }
+
+  .post-item-label {
+    font-family: var(--font-head); font-size: 8px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 2px;
+  }
+
+  .post-item-title {
+    font-family: var(--font-head); font-size: 12px; font-weight: 700;
+    color: var(--text); line-height: 1.3; outline: none;
+    word-wrap: break-word; overflow-wrap: break-word;
+  }
+
+  .post-item-body {
+    font-size: 11px; color: var(--text-muted); line-height: 1.55;
+    margin-top: 2px; outline: none;
+    word-wrap: break-word; overflow-wrap: break-word;
+  }
+
+  /* ─── STORY 9:16 ────────────────────────────────────── */
+  .story-view { display: flex; justify-content: center; animation: fadeUp 0.36s ease both; }
+
+  .story-card {
+    width: min(360px, 100%); max-height: 90vh; aspect-ratio: 9 / 16;
+    border-radius: var(--radius);
+    background: linear-gradient(180deg, #0c1a2e 0%, #1a0c28 40%, #001420 75%, #001a12 100%);
+    border: 1px solid var(--border2);
+    box-shadow: var(--shadow-lg);
+    display: flex; flex-direction: column;
+    padding: 26px 22px; overflow-y: auto; position: relative;
+  }
+
+  .story-top-bar { display: flex; gap: 4px; margin-bottom: 18px; }
+
+  .story-progress-seg {
+    flex: 1; height: 2px; border-radius: 2px;
+    background: rgba(255,255,255,0.1); overflow: hidden;
+  }
+
+  .story-progress-seg.done   { background: var(--accent); }
+  .story-progress-seg.active { background: linear-gradient(90deg, var(--accent) 60%, rgba(255,255,255,0.1) 60%); }
+
+  .story-brand {
+    font-family: var(--font-head); font-size: 11px; font-weight: 800;
+    letter-spacing: 2px; color: var(--accent); text-transform: uppercase;
+    text-align: center; margin-bottom: 20px;
+  }
+
+  .story-slides-list { flex: 1; display: flex; flex-direction: column; gap: 14px; }
+
+  .story-slide-item {
+    background: rgba(255,255,255,0.035);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px; padding: 14px;
+  }
+
+  .story-slide-label {
+    font-family: var(--font-head); font-size: 8px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px;
+  }
+
+  .story-slide-item:nth-child(1) .story-slide-label { color: var(--c-hook); }
+  .story-slide-item:nth-child(2) .story-slide-label { color: var(--c-problem); }
+  .story-slide-item:nth-child(3) .story-slide-label { color: var(--c-insight); }
+  .story-slide-item:nth-child(4) .story-slide-label { color: var(--c-example); }
+  .story-slide-item:nth-child(5) .story-slide-label { color: var(--c-takeaway); }
+
+  .story-item-title {
+    font-family: var(--font-head); font-size: 13px; font-weight: 700;
+    color: var(--text); line-height: 1.3; margin-bottom: 5px; outline: none;
+    word-wrap: break-word; overflow-wrap: break-word;
+  }
+
+  .story-item-body {
+    font-size: 11px; color: var(--text-muted); line-height: 1.6; outline: none;
+    word-wrap: break-word; overflow-wrap: break-word;
+  }
+
+  /* ─── TOAST ─────────────────────────────────────────── */
+  .toast {
+    position: fixed; bottom: 30px; left: 50%;
+    transform: translateX(-50%) translateY(70px);
+    background: var(--surface);
+    border: 1px solid rgba(56,189,248,0.25); border-radius: 50px;
+    padding: 11px 20px; font-size: 12px; font-weight: 600; color: var(--accent);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(56,189,248,0.12);
+    z-index: 1000; opacity: 0;
+    transition: transform 0.32s cubic-bezier(0.34,1.56,0.64,1), opacity 0.32s ease;
+    display: flex; align-items: center; gap: 7px; white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ─── RESPONSIVE ────────────────────────────────────── */
+  @media (max-width: 640px) {
+    header { padding: 13px 18px; }
+    .header-tagline { display: none; }
+    main { padding: 22px 14px 60px; }
+    .input-panel { padding: 18px; }
+    .input-row { flex-direction: column; }
+    .slide-card { padding: 26px 22px 24px; }
+    .slide-title { font-size: 20px; }
+    .slide-body  { font-size: 13px; }
+    .tabs-row { gap: 7px; }
+    .tab-btn { padding: 6px 11px; font-size: 11px; }
+    .action-row { flex-direction: column; align-items: stretch; }
+    .action-left, .action-right { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">✦</div>
+    <div>
+      <div class="logo-text">AI Social Media Studio <span>PRO</span><span class="header-badge">BETA</span></div>
+    </div>
+  </div>
+  <div class="header-tagline">Turn ideas into scroll-stopping content</div>
+</header>
+
+<main>
+
+  <!-- Input Panel -->
+  <div class="input-panel">
+    <div class="panel-label">Your Topic</div>
+    <div class="input-row">
+      <div class="input-wrapper">
+        <textarea id="topicInput"
+          placeholder="e.g. How to build habits that actually stick, morning routines for success…"
+          rows="3"></textarea>
+        <span class="input-error-msg" id="inputError" style="display:none"></span>
+      </div>
+      <button class="btn btn-primary" onclick="generate()" id="genBtn">
+        <span>✦</span> Generate
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs-row">
+    <div class="tabs-group" id="modeTabs">
+      <button class="tab-btn active" data-mode="learning" onclick="switchMode(this)">📚 Learning</button>
+      <button class="tab-btn" data-mode="story" onclick="switchMode(this)">📖 Story</button>
+    </div>
+    <div class="tabs-divider"></div>
+    <div class="tabs-group" id="formatTabs">
+      <button class="tab-btn active format-carousel" data-format="carousel" onclick="switchFormat(this)">⊞ Carousel</button>
+      <button class="tab-btn format-post" data-format="post" onclick="switchFormat(this)">◻ Post 1:1</button>
+      <button class="tab-btn format-story" data-format="story16" onclick="switchFormat(this)">▯ Story 9:16</button>
+    </div>
+  </div>
+
+  <!-- Action Row -->
+  <div class="action-row" id="actionRow" style="display:none">
+    <div class="action-left">
+      <button class="btn btn-ghost btn-sm" onclick="copyAll()">⎘ Copy All</button>
+      <button class="btn btn-ghost btn-sm" onclick="generate()">↻ Regenerate</button>
+    </div>
+    <div class="action-right">
+      <button class="btn btn-danger btn-sm" onclick="clearAll()">✕ Clear</button>
+    </div>
+  </div>
+
+  <!-- Display Area -->
+  <div id="display-area">
+    <div class="empty-state">
+      <div class="empty-icon">✦</div>
+      <div class="empty-title">Nothing here yet</div>
+      <div class="empty-sub">Enter a topic above and hit Generate to create your slide deck.</div>
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast">✓ Copied!</div>
+
+<script>
+// ─── STATE ─────────────────────────────────────────────
+const state = {
+  mode: 'learning',
+  format: 'carousel',
+  slides: [],
+  currentSlide: 0,
+  topic: ''
+};
+
+// ─── HELPERS ───────────────────────────────────────────
+
+function showInputError(msg) {
+  const topicInput = document.getElementById('topicInput');
+  const errorEl    = document.getElementById('inputError');
+  errorEl.textContent = '⚠ ' + (msg || 'Please enter a meaningful topic.');
+  topicInput.classList.add('input-error');
+  errorEl.style.display = 'flex';
+  topicInput.focus();
+  clearTimeout(showInputError._t);
+  showInputError._t = setTimeout(() => {
+    topicInput.classList.remove('input-error');
+    errorEl.style.display = 'none';
+  }, 4000);
+}
+
+function clearInputError() {
+  const topicInput = document.getElementById('topicInput');
+  const errorEl    = document.getElementById('inputError');
+  topicInput.classList.remove('input-error');
+  errorEl.style.display = 'none';
+}
+
+function showLoading() {
+  document.getElementById('display-area').innerHTML = `
+    <div class="loading-state">
+      <div class="loader"></div>
+      <div class="loading-text">Crafting your slides…</div>
+    </div>`;
+}
+
+function showEmptyState() {
+  document.getElementById('display-area').innerHTML = `
+    <div class="empty-state">
+      <div class="empty-icon">✦</div>
+      <div class="empty-title">Nothing here yet</div>
+      <div class="empty-sub">Enter a topic above and hit Generate to create your slide deck.</div>
+    </div>`;
+}
+
+// ─── GENERATE — BACKEND ONLY, NO LOCAL FALLBACK ────────
+async function generate() {
+  const topicInput = document.getElementById('topicInput');
+  const topic      = topicInput.value.trim();
+
+  // Basic client-side checks (fast UX, before network call)
+  if (!topic) {
+    showInputError('Please enter a topic before generating.');
+    return;
+  }
+  if (topic.length < 5) {
+    showInputError('Topic is too short — please be more specific.');
+    return;
+  }
+
+  clearInputError();
+  state.topic        = topic;
+  state.currentSlide = 0;
+  showLoading();
+
+  try {
+    const res  = await fetch('http://localhost:3000/generate', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ idea: topic, mode: state.mode }),
+    });
+
+    const data = await res.json();
+
+    // Backend returned a validation error — show it, stop here
+    if (data.error) {
+      showEmptyState();
+      showInputError(data.error);
+      return;
+    }
+
+    // Unexpected structure
+    if (!Array.isArray(data.slides) || data.slides.length === 0) {
+      showEmptyState();
+      showInputError('Server returned no slides. Please try again.');
+      return;
+    }
+
+    // Store slides, ensuring no field is ever undefined
+    state.slides = data.slides.map(s => ({
+      label: s.label || 'SLIDE',
+      icon:  s.icon  || '✦',
+      title: s.title || topic,
+      body:  s.body  || '',
+    }));
+
+    render();
+    document.getElementById('actionRow').style.display = 'flex';
+
+  } catch (err) {
+    showEmptyState();
+    document.getElementById('display-area').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">⚠️</div>
+        <div class="empty-title">Cannot reach server</div>
+        <div class="empty-sub">Make sure the backend is running.<br/>Run: <code style="color:var(--accent)">node server.js</code></div>
+      </div>`;
+  }
+}
+
+// ─── RENDER ROUTER ─────────────────────────────────────
+function render() {
+  if (!state.slides.length) return;
+  if      (state.format === 'carousel') renderCarousel();
+  else if (state.format === 'post')     renderPost();
+  else if (state.format === 'story16')  renderStory();
+}
+
+// ─── RENDER CAROUSEL ───────────────────────────────────
+function renderCarousel() {
+  const area = document.getElementById('display-area');
+
+  const slidesHTML = state.slides.map((s, i) => `
+    <div class="slide-card">
+      <div>
+        <div class="slide-badge">${s.icon} ${s.label}</div>
+        <div class="slide-title" contenteditable="true" spellcheck="false">${s.title}</div>
+        <div class="slide-body"  contenteditable="true" spellcheck="false">${s.body}</div>
+      </div>
+      <div class="slide-footer">
+        <span class="slide-num">${i + 1} / ${state.slides.length}</span>
+        <button class="slide-copy-btn" onclick="copySlide(${i})">⎘ Copy</button>
+      </div>
+    </div>`).join('');
+
+  const dotsHTML = state.slides.map((_, i) =>
+    `<span class="dot${i === state.currentSlide ? ' active' : ''}" onclick="goTo(${i})"></span>`
+  ).join('');
+
+  area.innerHTML = `
+    <div class="carousel-container">
+      <div class="carousel-track" id="carouselTrack">${slidesHTML}</div>
+    </div>
+    <div class="carousel-controls">
+      <button class="carousel-arrow" id="prevBtn" onclick="prevSlide()"
+        ${state.currentSlide === 0 ? 'disabled' : ''}>&#8592;</button>
+      <div class="carousel-dots" id="carouselDots">${dotsHTML}</div>
+      <span class="carousel-counter" id="carouselCounter">
+        ${state.currentSlide + 1} / ${state.slides.length}
+      </span>
+      <button class="carousel-arrow" id="nextBtn" onclick="nextSlide()"
+        ${state.currentSlide === state.slides.length - 1 ? 'disabled' : ''}>&#8594;</button>
+    </div>`;
+
+  updateCounter();
+}
+
+// ─── RENDER POST 1:1 ───────────────────────────────────
+function renderPost() {
+  const area     = document.getElementById('display-area');
+  const itemsHTML = state.slides.map(s => `
+    <div class="post-slide-item">
+      <div class="post-item-label">${s.icon} ${s.label}</div>
+      <div class="post-item-title" contenteditable="true" spellcheck="false">${s.title}</div>
+      <div class="post-item-body"  contenteditable="true" spellcheck="false">${s.body}</div>
+    </div>`).join('');
+
+  area.innerHTML = `
+    <div class="post-view">
+      <div class="post-card">
+        <div class="post-header">
+          <span class="post-logo-badge">✦ AI Studio PRO</span>
+        </div>
+        <div class="post-slides-list">${itemsHTML}</div>
+      </div>
+    </div>`;
+}
+
+// ─── RENDER STORY 9:16 ─────────────────────────────────
+function renderStory() {
+  const area    = document.getElementById('display-area');
+  const segsHTML = state.slides.map((_, i) =>
+    `<div class="story-progress-seg${i === 0 ? ' active' : ''}"></div>`
+  ).join('');
+
+  const itemsHTML = state.slides.map(s => `
+    <div class="story-slide-item">
+      <div class="story-slide-label">${s.icon} ${s.label}</div>
+      <div class="story-item-title" contenteditable="true" spellcheck="false">${s.title}</div>
+      <div class="story-item-body"  contenteditable="true" spellcheck="false">${s.body}</div>
+    </div>`).join('');
+
+  area.innerHTML = `
+    <div class="story-view">
+      <div class="story-card">
+        <div class="story-top-bar">${segsHTML}</div>
+        <div class="story-brand">✦ AI Studio PRO</div>
+        <div class="story-slides-list">${itemsHTML}</div>
+      </div>
+    </div>`;
+}
+
+// ─── CAROUSEL NAV ───────────────────────────────────────
+function goTo(i)     { state.currentSlide = i; updateCounter(); }
+function prevSlide() { if (state.currentSlide > 0) { state.currentSlide--; updateCounter(); } }
+function nextSlide() { if (state.currentSlide < state.slides.length - 1) { state.currentSlide++; updateCounter(); } }
+
+function updateCounter() {
+  const track   = document.getElementById('carouselTrack');
+  const counter = document.getElementById('carouselCounter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dots    = document.querySelectorAll('.dot');
+  if (!track) return;
+  track.style.transform = `translateX(-${state.currentSlide * 100}%)`;
+  if (counter) counter.textContent = `${state.currentSlide + 1} / ${state.slides.length}`;
+  if (prevBtn) prevBtn.disabled = state.currentSlide === 0;
+  if (nextBtn) nextBtn.disabled = state.currentSlide === state.slides.length - 1;
+  dots.forEach((d, i) => d.classList.toggle('active', i === state.currentSlide));
+}
+
+// ─── SWITCH MODE / FORMAT ───────────────────────────────
+function switchMode(btn) {
+  document.querySelectorAll('#modeTabs .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.mode = btn.dataset.mode;
+  if (state.slides.length) generate();
+}
+
+function switchFormat(btn) {
+  document.querySelectorAll('#formatTabs .tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.format = btn.dataset.format;
+  if (state.slides.length) render();
+}
+
+// ─── COPY ───────────────────────────────────────────────
+function copySlide(i) {
+  const s = state.slides[i];
+  if (!s) return;
+  const cards = document.querySelectorAll('.slide-card');
+  let title = s.title, body = s.body;
+  if (cards[i]) {
+    title = cards[i].querySelector('.slide-title')?.innerText || s.title;
+    body  = cards[i].querySelector('.slide-body')?.innerText  || s.body;
+  }
+  navigator.clipboard.writeText(`[${s.label}]\n${title}\n\n${body}`)
+    .then(() => showToast('Slide copied!')).catch(() => {});
+}
+
+function copyAll() {
+  const text = state.slides.map(s => `[${s.label}]\n${s.title}\n\n${s.body}`).join('\n\n---\n\n');
+  navigator.clipboard.writeText(text)
+    .then(() => showToast('All slides copied!')).catch(() => {});
+}
+
+// ─── CLEAR ──────────────────────────────────────────────
+function clearAll() {
+  state.slides = []; state.currentSlide = 0; state.topic = '';
+  document.getElementById('topicInput').value = '';
+  document.getElementById('actionRow').style.display = 'none';
+  showEmptyState();
+}
+
+// ─── TOAST ──────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = '✓ ' + msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ─── KEYBOARD NAV ───────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (state.format !== 'carousel' || !state.slides.length) return;
+  if (e.target.hasAttribute('contenteditable')) return;
+  if (e.key === 'ArrowLeft')  prevSlide();
+  if (e.key === 'ArrowRight') nextSlide();
+});
+</script>
+</body>
+</html>
